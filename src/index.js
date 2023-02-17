@@ -1,61 +1,57 @@
 // Import module yang dibuthkan
-import React, { useState } from "react";
+import React from "react";
+import "semantic-ui-css/semantic.min.css";
 import ReactDOM from "react-dom/client";
+import { faker } from "@faker-js/faker";
+import { Comment, CommentGroup } from "semantic-ui-react";
 
 // Membuat root element
 const el = document.getElementById("root");
 const root = ReactDOM.createRoot(el);
 
-// Membuat function App
-const App = () => {
-  //   Inisialisasti state
-  const [name, setName] = useState("");
-  const [job, setJob] = useState("");
+// Function untuk merender komentar
+function CommentLayout() {
+  const data = [
+    {
+      name: faker.name.fullName(),
+      avatar: faker.image.avatar(),
+      time: faker.date.past().toLocaleString(),
+      comment: faker.lorem.lines(),
+    },
+    {
+      name: faker.name.fullName(),
+      avatar: faker.image.avatar(),
+      time: faker.date.past().toLocaleString(),
+      comment: faker.lorem.lines(),
+    },
+    {
+      name: faker.name.fullName(),
+      avatar: faker.image.avatar(),
+      time: faker.date.past().toLocaleString(),
+      comment: faker.lorem.lines(),
+    },
+  ];
 
-  const [updatedName, setUpdateName] = useState(name);
-  const [updatedJob, setUpdateJob] = useState(job);
-
-  //   Membuat function handler
-  const handleName = (event) => {
-    setName(event.target.value);
-  };
-
-  const handleJob = (event) => {
-    setJob(event.target.value);
-  };
-
-  const handleClick = () => {
-    setUpdateName(name);
-    setUpdateJob(job);
-  };
-
-  //   Mereturn html yang diperlukan
-  return (
-    <div>
-      <label htmlFor="name">Name</label>
-      <input
-        type="text"
-        id="name"
-        name="name"
-        onChange={handleName}
-        value={name}
-        className="form-control"
-      />
-      <label htmlFor="job">Job</label>
-      <input
-        type="text"
-        id="job"
-        name="job"
-        onChange={handleJob}
-        value={job}
-        className="form-control"
-      />
-      <h1>Nama : {updatedName}</h1>
-      <h1>Pekerjaan : {updatedJob}</h1>
-      <button onClick={handleClick}>Submit</button>
-    </div>
-  );
-};
+  return data.map((d, i) => {
+    return (
+      <CommentGroup>
+        <Comment key={i}>
+          <Comment.Avatar src={d.avatar} />
+          <Comment.Content>
+            <Comment.Author as="a">{d.name}</Comment.Author>
+            <Comment.Metadata>
+              <div>{d.time}</div>
+            </Comment.Metadata>
+            <Comment.Text>{d.comment}</Comment.Text>
+            <Comment.Actions>
+              <Comment.Action>Reply</Comment.Action>
+            </Comment.Actions>
+          </Comment.Content>
+        </Comment>
+      </CommentGroup>
+    );
+  });
+}
 
 // Render App
-root.render(<App />);
+root.render(<CommentLayout />);
