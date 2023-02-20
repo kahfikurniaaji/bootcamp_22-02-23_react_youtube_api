@@ -3,55 +3,44 @@ import React from "react";
 import "semantic-ui-css/semantic.min.css";
 import ReactDOM from "react-dom/client";
 import { faker } from "@faker-js/faker";
-import { Comment, CommentGroup } from "semantic-ui-react";
+import Comments from "./component/Comments";
+import moment from "moment";
 
 // Membuat root element
 const el = document.getElementById("root");
 const root = ReactDOM.createRoot(el);
 
-// Function untuk merender komentar
-function CommentLayout() {
-  const data = [
-    {
-      name: faker.name.fullName(),
-      avatar: faker.image.avatar(),
-      time: faker.date.past().toLocaleString(),
-      comment: faker.lorem.lines(),
-    },
-    {
-      name: faker.name.fullName(),
-      avatar: faker.image.avatar(),
-      time: faker.date.past().toLocaleString(),
-      comment: faker.lorem.lines(),
-    },
-    {
-      name: faker.name.fullName(),
-      avatar: faker.image.avatar(),
-      time: faker.date.past().toLocaleString(),
-      comment: faker.lorem.lines(),
-    },
-  ];
+const data = [
+  {
+    name: faker.name.fullName(),
+    avatar: faker.image.avatar(),
+    day: "Today",
+    time: moment(faker.date.recent().toLocaleString()),
+    comment: faker.lorem.lines(),
+    liked: faker.datatype.number({ min: 0, max: 100 }),
+  },
+  {
+    name: faker.name.fullName(),
+    avatar: faker.image.avatar(),
+    day: "Today",
+    time: moment(faker.date.recent().toLocaleString()),
+    comment: faker.lorem.lines(),
+    liked: faker.datatype.number({ min: 0, max: 100 }),
+  },
+  {
+    name: faker.name.fullName(),
+    avatar: faker.image.avatar(),
+    day: "Today",
+    time: moment(faker.date.recent().toLocaleString()),
+    comment: faker.lorem.lines(),
+    liked: faker.datatype.number({ min: 0, max: 100 }),
+  },
+];
 
-  return data.map((d, i) => {
-    return (
-      <CommentGroup>
-        <Comment key={i}>
-          <Comment.Avatar src={d.avatar} />
-          <Comment.Content>
-            <Comment.Author as="a">{d.name}</Comment.Author>
-            <Comment.Metadata>
-              <div>{d.time}</div>
-            </Comment.Metadata>
-            <Comment.Text>{d.comment}</Comment.Text>
-            <Comment.Actions>
-              <Comment.Action>Reply</Comment.Action>
-            </Comment.Actions>
-          </Comment.Content>
-        </Comment>
-      </CommentGroup>
-    );
-  });
-}
+const App = () => {
+  return <Comments data={data} />;
+  // return <Counting />
+};
 
 // Render App
-root.render(<CommentLayout />);
+root.render(<App />);
