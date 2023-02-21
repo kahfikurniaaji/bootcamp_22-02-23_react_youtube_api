@@ -5,6 +5,9 @@ import ReactDOM from "react-dom/client";
 import { faker } from "@faker-js/faker";
 import Comments from "./component/Comments";
 import moment from "moment";
+import Clock from "./component/Clock";
+import Form from "./component/Form";
+import App from "./component/App";
 
 // Membuat root element
 const el = document.getElementById("root");
@@ -37,10 +40,11 @@ const data = [
   },
 ];
 
-const App = () => {
-  return <Comments data={data} />;
-  // return <Counting />
-};
+// const App = () => {
+//   // return <Comments data={data} />;
+//   // return <Counting />
+//   return <Form />;
+// };
 
 // Render App
 root.render(<App />);
