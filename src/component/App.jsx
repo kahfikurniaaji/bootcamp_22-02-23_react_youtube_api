@@ -1,40 +1,71 @@
+// Import module yang dibutuhkan
 import React from "react";
-// import "https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css";
-// import "https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js";
 import "semantic-ui-css/semantic.min.css";
-import { Image } from "semantic-ui-react";
-import unsplash from "../api/Unsplash";
+import { Embed, Grid, Header, Item } from "semantic-ui-react";
+import youtube from "../api/Youtube";
 import SearchBar from "./SearchBar";
-import Thumbnail from "./Thumbnail";
+
+// Class App
 class App extends React.Component {
-  state = { images: [] };
+  state = { images: [], items: [{ id: "", image: "" }] };
 
   onSearchSubmit = async (term) => {
-    const response = await unsplash.get("/search/photos", {
-      params: { query: term },
+    // Get url
+    const response = await youtube.get("/search", {
+      params: {
+        q: term,
+        part: "snippet",
+        maxResults: 5,
+        key: "AIzaSyDDBKtfLzYtGA1M854SeZ3YudPMfsIBdXE",
+        type: "video",
+      },
     });
 
-    this.setState({ images: response.data.results });
-    // console.log(this.state.images);
-    console.log(response.data.results);
+    // Mengubah state items
+    this.setState(
+      (this.state.items = response.data.items.map((element, index) => {
+        console.log(element);
+        const item = {};
+        item.id = element.id.videoId;
+        item.childKey = index;
+        item.image = element.snippet.thumbnails.default.url;
+        item.header = element.snippet.title;
+        item.description = element.snippet.channelTitle;
+        item.meta = "";
+        item.extra = "";
+        return item;
+      }))
+    );
+    
   };
 
+  // Render
   render() {
     return (
       <div className="ui container" style={{ marginTop: "10px" }}>
         <SearchBar onSubmit={this.onSearchSubmit} />
         <div>
-          <Image.Group size="small">
-            {this.state.images.map((element) => (
-              <Image src={element.urls.thumb} className={"item"} />
-              //   <img src={element.urls.thumb} alt="a" />;
-              //   console.log(element.urls.thumb)
-            ))}
-          </Image.Group>
+          <Grid>
+            <Grid.Row>
+              <Grid.Column width={10}>
+                <Embed
+                  id={this.state.items[0].id}
+                  placeholder={this.state.items[0].image}
+                  source="youtube"
+                />
+                <Header as='h2'>{this.state.items[0].header}</Header>
+                <Header as='h5'>{this.state.items[0].description}</Header>
+              </Grid.Column>
+              <Grid.Column width={6}>
+                <Item.Group items={this.state.items} />
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
         </div>
       </div>
     );
   }
 }
 
+// Export App
 export default App;
